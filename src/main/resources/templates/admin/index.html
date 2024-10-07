@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Page</title>
   </head>
   <body>
-    <h2>Welcome, Admin!</h2>
-    <!-- Содержимое страницы админа -->
+    Hello admin
+
+    <a th:href="@{/admin/users}">Таблица юзеров</a>
+    <a th:href="@{/admin/suppliers}">Таблица поставщиков</a>
+    <!-- при клике на поставщика выводить его список продуктов -->
+    <a th:href="@{/admin/orders}">Таблица заказов</a>
   </body>
 </html>

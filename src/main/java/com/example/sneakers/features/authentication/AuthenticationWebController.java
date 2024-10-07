@@ -17,6 +17,7 @@ import com.example.sneakers.features.authentication.dtos.RegisterUserDto;
 import com.example.sneakers.features.user.UserAccount;
 import com.example.sneakers.features.user.exceptions.UserAlreadyExistsException;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
@@ -76,7 +77,7 @@ public class AuthenticationWebController {
       RedirectAttributes redirectAttributes, HttpServletResponse response) {
 
     if (bindingResult.hasErrors()) {
-      StringBuilder errorMessages = new StringBuilder("Validation failed: ");
+      StringBuilder errorMessages = new StringBuilder("Ошибка валидации: ");
       bindingResult.getFieldErrors().forEach(
           error -> errorMessages.append(error.getField()).append(" ").append(error.getDefaultMessage()).append("; "));
       redirectAttributes.addFlashAttribute("error", errorMessages.toString());
@@ -95,19 +96,28 @@ public class AuthenticationWebController {
 
       response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-      if (authenticatedUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-        return "redirect:/admin/index";
-      } else if (authenticatedUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPPLIER"))) {
-        return "redirect:/supplier/index";
+      if (authenticatedUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+        return "redirect:/admin";
+      } else if (authenticatedUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("SUPPLIER"))) {
+        return "redirect:/supplier";
       }
 
       return "redirect:/users";
     } catch (AuthenticationException e) {
-      redirectAttributes.addFlashAttribute("error", "Invalid login: " + e.getMessage());
+      redirectAttributes.addFlashAttribute("error", "Неверный логин или пароль");
       return "redirect:/auth/web/login";
     } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again later.");
+      redirectAttributes.addFlashAttribute("error", "Произошла ошибка");
       return "redirect:/auth/web/login";
     }
+  }
+
+  @GetMapping("/logout")
+  public String logout(HttpServletResponse response) {
+    Cookie cookie = new Cookie("authToken", null);
+    cookie.setMaxAge(0);
+    cookie.setPath("/");
+    response.addCookie(cookie);
+    return "redirect:/auth/web/login";
   }
 }

@@ -52,12 +52,12 @@ public class AuthenticationController {
 
       return ResponseEntity.ok(loginResponse);
     } catch (UsernameNotFoundException e) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Пользователь не найден");
     } catch (AuthenticationException e) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login credentials");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверный юзернейм или пароль");
     } catch (Exception e) {
       e.printStackTrace();
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Произошла ошибка");
     }
   }
 }

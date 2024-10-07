@@ -23,7 +23,6 @@ public class UserController {
   public ResponseEntity<UserAccount> authenticatedUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    // Check if the user is authenticated
     if (authentication == null || !authentication.isAuthenticated()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
@@ -34,7 +33,7 @@ public class UserController {
 
   @GetMapping
   public ResponseEntity<List<UserAccount>> allUsers() {
-    List<UserAccount> users = userService.allUsers();
+    List<UserAccount> users = userService.getAllUsers();
     return ResponseEntity.ok(users);
   }
 }

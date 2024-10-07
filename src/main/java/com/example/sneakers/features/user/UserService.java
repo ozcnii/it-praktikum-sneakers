@@ -1,7 +1,6 @@
 package com.example.sneakers.features.user;
 
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -12,11 +11,19 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public List<UserAccount> allUsers() {
-    List<UserAccount> users = new ArrayList<>();
+  public List<UserAccount> getAllUsers() {
+    return userRepository.findAll();
+  }
 
-    userRepository.findAll().forEach(users::add);
+  public UserAccount getUserById(Long id) {
+    return userRepository.findById(id).orElse(null);
+  }
 
-    return users;
+  public UserAccount saveUser(UserAccount user) {
+    return userRepository.save(user);
+  }
+
+  public void deleteUser(Long id) {
+    userRepository.deleteById(id);
   }
 }
