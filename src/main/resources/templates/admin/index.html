@@ -3,14 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Page</title>
+    <title>Админ</title>
   </head>
   <body>
-    Hello admin
-
-    <a th:href="@{/admin/users}">Таблица юзеров</a>
-    <a th:href="@{/admin/suppliers}">Таблица поставщиков</a>
+    Hello, <span th:text="${username}" th:remove="tag">username</span>!
+    <a th:href="@{/auth/web/logout}">Выход</a>
+    <br />
+    <br />
+    <a th:href="@{/admin/users}">Пользователи</a>
+    <br />
+    <br />
+    <a th:href="@{/admin/suppliers}">Поставщики</a>
+    <br />
+    <br />
     <!-- при клике на поставщика выводить его список продуктов -->
-    <a th:href="@{/admin/orders}">Таблица заказов</a>
+    <a th:href="@{/admin/orders}">Заказы</a>
   </body>
 </html>

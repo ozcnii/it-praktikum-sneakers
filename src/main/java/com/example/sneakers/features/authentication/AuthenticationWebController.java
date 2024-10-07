@@ -55,14 +55,13 @@ public class AuthenticationWebController {
 
     try {
       authenticationService.signup(registerUserDto);
-      redirectAttributes.addFlashAttribute("success", "Registration successful! Please log in.");
       return "redirect:/auth/web/login";
     } catch (UserAlreadyExistsException e) {
       redirectAttributes.addFlashAttribute("error", e.getMessage());
       return "redirect:/auth/web/register";
     } catch (Exception e) {
       e.printStackTrace();
-      redirectAttributes.addFlashAttribute("error", "An unexpected error occurred. Please try again.");
+      redirectAttributes.addFlashAttribute("error", "Ошибка регистрации. Попробуйте ещё раз.");
       return "redirect:/auth/web/register";
     }
   }
@@ -96,9 +95,9 @@ public class AuthenticationWebController {
 
       response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-      if (authenticatedUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+      if (authenticatedUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
         return "redirect:/admin";
-      } else if (authenticatedUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("SUPPLIER"))) {
+      } else if (authenticatedUser.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPPLIER"))) {
         return "redirect:/supplier";
       }
 
