@@ -101,7 +101,7 @@ public class AuthenticationWebController {
         return "redirect:/supplier";
       }
 
-      return "redirect:/users";
+      return "redirect:/user";
     } catch (AuthenticationException e) {
       redirectAttributes.addFlashAttribute("error", "Неверный логин или пароль");
       return "redirect:/auth/web/login";

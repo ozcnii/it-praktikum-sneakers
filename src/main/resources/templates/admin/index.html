@@ -6,8 +6,11 @@
     <title>Админ</title>
   </head>
   <body>
-    Hello, <span th:text="${username}" th:remove="tag">username</span>!
-    <a th:href="@{/auth/web/logout}">Выход</a>
+    <div>
+      Привет, <span th:text="${username}" th:remove="tag">username</span>!
+      <a th:href="@{/auth/web/logout}">Выход</a>
+    </div>
+
     <br />
     <br />
     <a th:href="@{/admin/users}">Пользователи</a>
@@ -18,5 +21,9 @@
     <br />
     <!-- при клике на поставщика выводить его список продуктов -->
     <a th:href="@{/admin/orders}">Заказы</a>
+
+    <br />
+    <br />
+    <a th:href="@{/admin/supplier-requests}">Завяки на роль поставщика</a>
   </body>
 </html>

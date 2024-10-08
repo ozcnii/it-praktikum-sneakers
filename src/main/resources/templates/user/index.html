@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>User Page</title>
+    <title>Пользователь</title>
   </head>
   <body>
-    <h2>Welcome, User!</h2>
+    <div>
+      Привет, <span th:text="${username}" th:remove="tag">username</span>!
+      <a th:href="@{/auth/web/logout}">Выход</a>
+    </div>
+
+    <br />
+
+    <div th:if="${status == null}">
+      Хотите стать поставщиком?
+      <a th:href="@{/user/supplier-request}">Подать заявку</a>
+    </div>
+
+    <div th:if="${status}">
+      Завяка на роль поставщика: в ожидании подтверждения администратором
+    </div>
   </body>
 </html>
