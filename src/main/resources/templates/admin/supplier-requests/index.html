@@ -7,6 +7,12 @@
   </head>
   <body>
     <h1>Завяки</h1>
+
+    <a th:href="@{/admin}"> На главную </a>
+
+    <br />
+    <br />
+
     <table border="1" cellpadding="5 10">
       <tr>
         <th>ID</th>
@@ -17,14 +23,34 @@
       <tr th:each="request : ${requests}">
         <td th:text="${request.id}"></td>
         <td th:text="${request.user.username}"></td>
-        <td>
-          <a th:href="@{/admin/users/edit/{id}(id=${request.id})}"
-            >Подтвердить</a
+        <td style="display: flex; gap: 8px">
+          <form
+            method="POST"
+            th:action="@{/admin/supplier-requests/approve/{requestId}(requestId=${request.id})}"
           >
+            <button
+              type="submit"
+              name="submit"
+              value="value"
+              class="link-button"
+            >
+              Подтвердить
+            </button>
+          </form>
           |
-          <a th:href="@{/admin/users/delete/{id}(id=${request.id})}"
-            >Отклонить</a
+          <form
+            method="POST"
+            th:action="@{/admin/supplier-requests/reject/{requestId}(requestId=${request.id})}"
           >
+            <button
+              type="submit"
+              name="submit"
+              value="value"
+              class="link-button"
+            >
+              Отклонить
+            </button>
+          </form>
         </td>
       </tr>
     </table>

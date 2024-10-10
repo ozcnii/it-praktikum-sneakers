@@ -16,7 +16,7 @@ public class SupplierRequestService {
   private SupplierRequestRepository supplierRequestRepository;
 
   @Autowired
-  private UserRepository userRepository; // Репозиторий для доступа к данным пользователя
+  private UserRepository userRepository;
 
   public void saveRequest(Long userId) {
     UserAccount user = userRepository.findById(userId)
@@ -49,5 +49,29 @@ public class SupplierRequestService {
 
   public List<SupplierRequest> getPendingRequests() {
     return supplierRequestRepository.findByStatus(RequestStatus.PENDING);
+  }
+
+  public void approveRequest(Long requestId) {
+    var request = supplierRequestRepository.findById(requestId);
+
+    if (request.isEmpty()) {
+      throw new Error("Заявка не найдена");
+    }
+
+    var instance = request.get();
+    instance.setStatus(RequestStatus.APPROVED);
+    supplierRequestRepository.save(instance);
+  }
+
+  public void rejectRequest(Long requestId) {
+    var request = supplierRequestRepository.findById(requestId);
+
+    if (request.isEmpty()) {
+      throw new Error("Заявка не найдена");
+    }
+
+    var instance = request.get();
+    instance.setStatus(RequestStatus.REJECTED);
+    supplierRequestRepository.save(instance);
   }
 }
