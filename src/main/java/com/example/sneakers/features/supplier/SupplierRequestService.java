@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.sneakers.features.supplier.entities.RequestStatus;
 import com.example.sneakers.features.supplier.entities.SupplierRequest;
+import com.example.sneakers.features.user.Role;
 import com.example.sneakers.features.user.UserAccount;
 import com.example.sneakers.features.user.UserRepository;
 
@@ -60,6 +61,9 @@ public class SupplierRequestService {
 
     var instance = request.get();
     instance.setStatus(RequestStatus.APPROVED);
+
+    instance.getUser().setRole(Role.ROLE_SUPPLIER);
+
     supplierRequestRepository.save(instance);
   }
 

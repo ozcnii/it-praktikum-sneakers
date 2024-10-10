@@ -26,4 +26,8 @@ public class UserService {
   public void deleteUser(Long id) {
     userRepository.deleteById(id);
   }
+
+  public List<UserAccount> getSuppliers() {
+    return userRepository.findAllByRole(Role.ROLE_SUPPLIER);
+  }
 }
