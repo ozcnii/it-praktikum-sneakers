@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.sneakers.features.supplier.SupplierRequestService;
+import com.example.sneakers.features.supplier.entities.RequestStatus;
 import com.example.sneakers.features.supplier.entities.SupplierRequest;
 
 @RequestMapping("/user")
@@ -46,8 +47,26 @@ public class UserController {
 
     SupplierRequest supplierRequest = supplierRequestService.getRequest(currentUser.getId());
 
+    if (supplierRequest == null) {
+      model.addAttribute("status", null);
+    } else {
+      var status = supplierRequest.getStatus();
+      var statusMessage = "Завяка на роль поставщика: ";
+
+      if (status == RequestStatus.APPROVED) {
+        statusMessage += "в ожидании подтверждения";
+      } else if (status == RequestStatus.REJECTED) {
+        statusMessage += "отклонено";
+      } else if (status == RequestStatus.PENDING) {
+        statusMessage += "в ожидании";
+      } else {
+        statusMessage += "?";
+      }
+
+      model.addAttribute("status", statusMessage);
+    }
+
     model.addAttribute("username", currentUser.getUsername());
-    model.addAttribute("status", supplierRequest.getStatus());
 
     return "/user/index";
   }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Редактирование Кроссовка</title>
+  </head>
+  <body>
+    <h1>Редактирование Кроссовка</h1>
+
+    <a th:href="@{/supplier}"> На главную </a>
+    <br />
+    <a th:href="@{/supplier/sneakers}"> Все кроссовки</a>
+
+    <br />
+    <br />
+
+    <form
+      th:action="@{/supplier/sneakers/edit/{id}(id=${sneaker.id})}"
+      th:object="${sneaker}"
+      method="post"
+    >
+      <label for="name">Название:</label>
+      <input type="text" id="name" th:field="*{name}" required />
+      <br /><br />
+
+      <label for="brand">Бренд:</label>
+      <input type="text" id="brand" th:field="*{brand}" required />
+      <br /><br />
+
+      <label for="price">Цена, ₽:</label>
+      <input type="number" id="price" th:field="*{price}" required />
+      <br /><br />
+
+      <label for="description">Описание:</label>
+      <textarea id="description" th:field="*{description}"></textarea>
+      <br /><br />
+
+      <label for="imageUrl">URL изображения:</label>
+      <input type="text" id="imageUrl" th:field="*{imageUrl}" />
+      <br /><br />
+
+      <button type="submit">Сохранить изменения</button>
+    </form>
+
+    <div th:if="${param.error}">
+      <p>Кроссовка не найдено!</p>
+    </div>
+  </body>
+</html>

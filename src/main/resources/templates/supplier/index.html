@@ -9,6 +9,14 @@
     <div>
       Привет, <span th:text="${username}" th:remove="tag">username</span>!
       <a th:href="@{/auth/web/logout}">Выход</a>
+
+      <br />
+      <br />
+
+      <a th:href="@{/supplier/sneakers}">Все кроссовки</a>
+      <br />
+      <a th:href="@{/supplier/sneakers/create}">Создать кроссовка</a>
+      <br />
     </div>
   </body>
 </html>
