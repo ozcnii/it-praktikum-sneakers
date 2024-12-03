@@ -1,13 +1,24 @@
-# Этап сборки
-FROM maven:3.9.6-amazoncorretto-21 as builder
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests -Pdev
+# Используем образ OpenJDK 21
+FROM openjdk:21-jdk-slim
 
-# Этап запуска
-FROM amazoncorretto:21-alpine
+# Установим рабочую директорию в контейнере
 WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
+
+# Копируем файл Maven Wrapper и настройки проекта
+COPY ./mvnw ./mvnw
+COPY ./mvnw.cmd ./mvnw.cmd
+COPY ./.mvn ./.mvn
+COPY ./pom.xml ./pom.xml
+COPY ./src ./src
+
+# Делаем Maven Wrapper исполняемым
+RUN chmod +x mvnw
+
+# Собираем приложение
+RUN ./mvnw clean package -DskipTests
+
+# Устанавливаем команду для запуска приложения
+CMD ["./mvnw", "spring-boot:run"]
+
+# Открываем порт приложения
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=dev", "app.jar"]

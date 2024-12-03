@@ -1,1 +1,1 @@
-to run `docker-compose -f tyoma.yml up`
+to run `docker-compose up`
