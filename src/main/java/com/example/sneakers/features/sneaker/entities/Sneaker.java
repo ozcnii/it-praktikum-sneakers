@@ -3,6 +3,8 @@ package com.example.sneakers.features.sneaker.entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -19,6 +21,7 @@ import jakarta.validation.constraints.Min;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Sneaker {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

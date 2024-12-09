@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Создание заказа</title>
+  </head>
+  <body>
+    <h1>Создание заказа</h1>
+
+    <div th:if="${sneaker != null}">
+      <h2 th:text="'Вы создаете заказ на:' + ${sneaker.name}"></h2>
+      <p th:text="'Бренд: ' + ${sneaker.brand}"></p>
+      <p th:text="'Цена: ' + ${sneaker.price} + ' руб.'"></p>
+      <p th:text="'Описание: ' + ${sneaker.description}"></p>
+    </div>
+
+    <form th:action="@{/user/orders/create}" th:object="${order}" method="post">
+      <input type="hidden" name="sneakerId" th:value="${sneaker.id}" />
+      <label for="quantity">Количество:</label>
+      <input
+        type="number"
+        id="quantity"
+        th:field="*{quantity}"
+        min="1"
+        required
+      />
+      <button type="submit">Создать заказ</button>
+    </form>
+  </body>
+</html>

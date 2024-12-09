@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.example.sneakers.features.sneaker.entities.Sneaker;
+import com.example.sneakers.features.user.UserAccount;
 
 @Entity
 @Data
@@ -34,6 +35,10 @@ public class Order {
   private int quantity;
   private BigDecimal totalPrice;
   private LocalDateTime orderDate;
+
   @Enumerated(EnumType.STRING)
   private OrderStatus orderStatus = OrderStatus.PENDING;
+
+  @ManyToOne
+  private UserAccount user;
 }
