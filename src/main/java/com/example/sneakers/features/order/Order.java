@@ -10,13 +10,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
-import com.example.sneakers.features.sneaker.entities.Sneaker;
 import com.example.sneakers.features.user.UserAccount;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Data
@@ -28,11 +30,6 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  private Sneaker sneaker;
-
-  private Long supplierId;
-  private int quantity;
   private BigDecimal totalPrice;
   private LocalDateTime orderDate;
 
@@ -41,4 +38,8 @@ public class Order {
 
   @ManyToOne
   private UserAccount user;
+
+  @JsonManagedReference
+  @OneToMany(mappedBy = "order")
+  private List<OrderItem> items;
 }

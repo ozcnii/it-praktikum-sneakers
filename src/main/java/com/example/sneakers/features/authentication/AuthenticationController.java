@@ -28,12 +28,12 @@ public class AuthenticationController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<Long> register(@RequestBody RegisterUserDto registerUserDto) {
+  public ResponseEntity<String> register(@RequestBody RegisterUserDto registerUserDto) {
     try {
       UserAccount registeredUser = authenticationService.signup(registerUserDto);
-      return ResponseEntity.ok(registeredUser.getId());
+      return ResponseEntity.ok(registeredUser.getId().toString());
     } catch (UserAlreadyExistsException e) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

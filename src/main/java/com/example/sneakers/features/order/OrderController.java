@@ -4,6 +4,7 @@ import com.example.sneakers.features.sneaker.entities.Sneaker;
 import com.example.sneakers.features.sneaker.repositories.SneakerRepository;
 import com.example.sneakers.features.user.UserAccount;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
@@ -27,24 +28,38 @@ public class OrderController {
   @Autowired
   private OrderRepository orderRepository;
 
+  @Autowired
+  private OrderItemRepository orderItemRepository;
+
   @PostMapping("/create")
   public ResponseEntity<String> createOrder(@RequestBody CreateOrderRequest request,
       @AuthenticationPrincipal UserAccount currentUser) {
-    Optional<Sneaker> optionalSneaker = sneakerRepository.findById(request.getSneakerId());
+    Order order = new Order();
+    order.setUser(currentUser);
+    order.setOrderDate(LocalDateTime.now());
+    order.setTotalPrice(BigDecimal.ZERO);
+    orderRepository.save(order);
 
-    if (optionalSneaker.isPresent()) {
-      Sneaker sneaker = optionalSneaker.get();
-      Order order = new Order();
-      order.setSneaker(sneaker);
-      order.setQuantity(request.getQuantity());
-      order.setTotalPrice(sneaker.getPrice().multiply(BigDecimal.valueOf(request.getQuantity())));
-      order.setUser(currentUser);
-      order.setOrderDate(LocalDateTime.now());
-      orderRepository.save(order);
-      return ResponseEntity.ok("Заказ успешно создан");
-    } else {
-      return ResponseEntity.badRequest().body("Кроссовок не найден");
+    for (CreateOrderItemRequest itemRequest : request.getItems()) {
+      Optional<Sneaker> optionalSneaker = sneakerRepository.findById(itemRequest.getSneakerId());
+
+      if (optionalSneaker.isPresent()) {
+        Sneaker sneaker = optionalSneaker.get();
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrder(order);
+        orderItem.setSneaker(sneaker);
+        orderItem.setQuantity(itemRequest.getQuantity());
+        orderItem.setPrice(sneaker.getPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity())));
+        orderItemRepository.save(orderItem);
+
+        order.setTotalPrice(order.getTotalPrice().add(orderItem.getPrice()));
+      } else {
+        return ResponseEntity.badRequest().body("Кроссовок с ID " + itemRequest.getSneakerId() + " не найден");
+      }
     }
+
+    orderRepository.save(order);
+    return ResponseEntity.ok("Заказ успешно создан");
   }
 
   @GetMapping
@@ -54,10 +69,24 @@ public class OrderController {
   }
 
   public static class CreateOrderRequest {
+    @NotNull(message = "Список элементов заказа не должен быть пустым")
+    private List<CreateOrderItemRequest> items;
+
+    public List<CreateOrderItemRequest> getItems() {
+      return items;
+    }
+
+    public void setItems(List<CreateOrderItemRequest> items) {
+      this.items = items;
+    }
+  }
+
+  public static class CreateOrderItemRequest {
     @NotNull(message = "ID обуви не должен быть равен нулю")
     private Long sneakerId;
 
     @Min(value = 1, message = "Количество должно быть не менее 1")
+    @Max(value = 10, message = "Количество не должно превышать 10")
     private int quantity;
 
     public Long getSneakerId() {

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Admin Orders</title>
+  </head>
+  <body>
+    <div>
+      <h1>Заказы</h1>
+      <table border="1" cellpadding="5 10">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Заказал</th>
+            <th>Дата</th>
+            <th>Общая цена</th>
+            <th>Статус</th>
+            <th>Обновить статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="order : ${orders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.user.username}"></td>
+            <td th:text="${order.orderDate}"></td>
+            <td th:text="${order.totalPrice}"></td>
+            <td th:text="${order.orderStatus}"></td>
+            <td>
+              <form
+                th:action="@{/admin/orders/{id}/status(id=${order.id})}"
+                method="post"
+              >
+                <select name="orderStatus" class="form-control">
+                  <option
+                    th:each="status : ${T(com.example.sneakers.features.order.OrderStatus).values()}"
+                    th:value="${status}"
+                    th:text="${status}"
+                    th:selected="${status == order.orderStatus}"
+                  ></option>
+                </select>
+                <button type="submit" class="btn btn-primary">Обновить</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
